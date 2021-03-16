@@ -1,4 +1,4 @@
-import { getPageData } from "utils/api";
+import { getPageData } from "../../utils/api";
 
 export default async (req, res) => {
   // Check the secret and next parameters

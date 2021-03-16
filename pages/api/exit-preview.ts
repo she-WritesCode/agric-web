@@ -1,6 +1,6 @@
-import { redirect } from "next/dist/next-server/server/api-utils";
-
-export default async function exit(req, res) {
+// import { redirect } from "next/dist/next-server/server/api-utils";
+import type { NextApiRequest, NextApiResponse } from 'next'
+export default async function exit(req: NextApiRequest, res: NextApiResponse) {
   // Exit the current user from "Preview Mode". This function accepts no args.
   res.clearPreviewData();
 

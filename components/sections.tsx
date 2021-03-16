@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import Hero from "@/components/sections/hero";
-import LargeVideo from "@/components/sections/large-video";
-import FeatureColumnsGroup from "@/components/sections/feature-columns-group";
-import FeatureRowsGroup from "@/components/sections/feature-rows-group";
-import BottomActions from "@/components/sections/bottom-actions";
-import TestimonialsGroup from "@/components/sections/testimonials-group";
+import Hero from "./sections/hero";
+import LargeVideo from "./sections/large-video";
+import FeatureColumnsGroup from "./sections/feature-columns-group";
+import FeatureRowsGroup from "./sections/feature-rows-group";
+import BottomActions from "./sections/bottom-actions";
+import TestimonialsGroup from "./sections/testimonials-group";
 import RichText from "./sections/rich-text";
 import Pricing from "./sections/pricing";
 import LeadForm from "./sections/lead-form";

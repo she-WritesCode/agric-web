@@ -1,6 +1,6 @@
 import Image from "./image";
 import PropTypes from "prop-types";
-import { linkPropTypes, mediaPropTypes } from "utils/types";
+import { linkPropTypes, mediaPropTypes } from "../../utils/types";
 import CustomLink from "./custom-link";
 
 const Footer = ({ footer }) => {

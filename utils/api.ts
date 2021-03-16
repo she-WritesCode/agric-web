@@ -1,12 +1,11 @@
-export function getStrapiURL(path) {
-  return `${
-    process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
-  }${path}`
+export function getStrapiURL(path: string) {
+  return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
+    }${path}`
 }
 
 // Helper to make GET requests to Strapi
 
-export async function fetchAPI(path, options = {}) {
+export async function fetchAPI(path: string, options: Record<string, any> = {}) {
   const defaultOptions = {
     headers: {
       'Content-Type': 'application/json',
@@ -24,10 +23,10 @@ export async function fetchAPI(path, options = {}) {
     throw new Error(`An error occured please try again`)
   }
   const data = await response.json()
-  return data
+  return data // as Record<string, any>
 }
 
-export async function getPageData(slug, preview = false) {
+export async function getPageData(slug: string, preview = false) {
   // Find the pages that match this slug
   const pagesData = await fetchAPI(
     `/pages?slug=${slug}&status=published${preview ? '&status=draft' : ''}`
@@ -45,5 +44,5 @@ export async function getPageData(slug, preview = false) {
 // Get site data from Strapi (metadata, navbar, footer...)
 export async function getGlobalData() {
   const global = await fetchAPI('/global')
-  return global
+  return global as Record<string, any>
 }

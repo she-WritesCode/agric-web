@@ -1,8 +1,8 @@
 import Button from '../elements/button'
 import { useState } from 'react'
-import { fetchAPI } from 'utils/api'
+import { fetchAPI } from '../../utils/api'
 import * as yup from 'yup'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, FormikErrors } from 'formik'
 
 const LeadForm = ({ data }) => {
   const [loading, setLoading] = useState(false)
@@ -16,13 +16,12 @@ const LeadForm = ({ data }) => {
       <h1 className="text-3xl mb-10 font-bold mb-2">{data.title}</h1>
       <div className="flex flex-col items-center">
         <Formik
-          initialValues={{ email: '' }}
+          initialValues={{ email: '', api: '' }}
           validationSchema={LeadSchema}
           onSubmit={async (values, { setSubmitting, setErrors }) => {
             setLoading(true)
 
             try {
-              setErrors({ api: null })
               await fetchAPI('/lead-form-submissions', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -56,6 +55,7 @@ const LeadForm = ({ data }) => {
                   button={data.submitButton}
                   disabled={isSubmitting}
                   loading={loading}
+                  handleClick
                 />
               </Form>
               <p className="text-red-500 h-12 text-sm mt-1 ml-2 text-left">

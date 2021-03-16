@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import { buttonLinkPropTypes } from 'utils/types'
+import { buttonLinkPropTypes } from "../../utils/types"
 import Loader from './loader'
 
 const Button = ({
@@ -10,9 +10,10 @@ const Button = ({
   handleClick,
   loading = false,
   type,
+  disabled
 }) => {
   return (
-    <button link={button} onClick={handleClick} type={type}>
+    <button data-link={button} disabled={disabled} onClick={handleClick} type={type}>
       <div
         className={classNames(
           // Common classes

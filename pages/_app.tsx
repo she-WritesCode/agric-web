@@ -3,12 +3,20 @@ import Head from "next/head";
 import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { DefaultSeo } from "next-seo";
-import { getStrapiMedia } from "utils/media";
-import { getStrapiURL, getGlobalData } from "utils/api";
-import Layout from "@/components/layout";
-import "@/styles/index.css";
+import { getStrapiMedia } from "../utils/media";
+import { getStrapiURL, getGlobalData } from "../utils/api";
+import Layout from "../components/layout";
+import "../styles/index.css";
+import type { AppProps /*, AppContext */ } from 'next/app'
+import React from "react";
+import { NextPage } from "next";
 
-const MyApp = ({ Component, pageProps }) => {
+export interface PageProps {
+    global: any;
+    path: string;
+}
+
+const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }) => {
   // Prevent Next bug when it tries to render the [[...slug]] route
   const router = useRouter();
   if (router.asPath === "/[[...slug]]") {
@@ -16,7 +24,7 @@ const MyApp = ({ Component, pageProps }) => {
   }
 
   // Extract the data we need
-  const { global } = pageProps;
+  const { global } = pageProps as PageProps;
   if (global == null) {
     return <ErrorPage statusCode={404} />;
   }
@@ -34,7 +42,7 @@ const MyApp = ({ Component, pageProps }) => {
         title={"Page"}
         description={metadata.metaDescription}
         openGraph={{
-          images: Object.values(metadata.shareImage.formats).map((image) => {
+          images: Object.values(metadata.shareImage.formats).map((image: Record<string, any>) => {
             return {
               url: getStrapiMedia(image.url),
               width: image.width,

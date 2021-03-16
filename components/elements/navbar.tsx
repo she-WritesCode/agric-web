@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import { MdMenu } from "react-icons/md";
@@ -9,8 +9,8 @@ import {
   mediaPropTypes,
   linkPropTypes,
   buttonLinkPropTypes,
-} from "utils/types";
-import { getButtonAppearance } from "utils/button";
+} from "../../utils/types";
+import { getButtonAppearance } from "../../utils/button";
 import CustomLink from "./custom-link";
 
 const Navbar = ({ navbar }) => {

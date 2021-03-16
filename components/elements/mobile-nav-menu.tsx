@@ -5,10 +5,10 @@ import {
   mediaPropTypes,
   linkPropTypes,
   buttonLinkPropTypes,
-} from "utils/types";
+} from "../../utils/types";
 import ButtonLink from "./button-link";
-import { useLockBodyScroll } from "utils/hooks";
-import { getButtonAppearance } from "utils/button";
+import { useLockBodyScroll } from "../../utils/hooks";
+import { getButtonAppearance } from "../../utils/button";
 import CustomLink from "./custom-link";
 
 const MobileNavMenu = ({ navbar, closeSelf }) => {

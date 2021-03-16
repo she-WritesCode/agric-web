@@ -1,7 +1,7 @@
 import Markdown from "react-markdown";
 import ButtonLink from "../elements/button-link";
 import Image from "../elements/image";
-import { getButtonAppearance } from "utils/button";
+import { getButtonAppearance } from "../../utils/button";
 
 const Hero = ({ data }) => {
   return (
