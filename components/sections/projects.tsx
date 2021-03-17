@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { getProjectData, getProjects } from "../../utils/api";
 import qs from "qs";
 import { useEffect, useState } from "react";
+import ProjectCard from "../projects/project-card";
 
 export interface Project {
 	id: number;
@@ -24,7 +25,6 @@ export interface Project {
 }
 
 const Projects = ({ data }) => {
-	console.log(data);
 	const [projects, setProjects] = useState<Project[]>([]);
 
 	useEffect(() => {
@@ -35,12 +35,14 @@ const Projects = ({ data }) => {
 
 	return (
 		<div className="container py-12">
-			<h3>{data.title || "Projects"}</h3>
-			<ul>
-				{projects.map((post) => (
-					<li>{post.title}</li>
+			<h3>{data.title || ""}</h3>
+			<div className="grid grid-col-3">
+				{projects.map((project) => (
+					<div key={project.id}>
+						<ProjectCard project={project} />
+					</div>
 				))}
-			</ul>
+			</div>
 		</div>
 	);
 };
