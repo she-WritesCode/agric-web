@@ -1,8 +1,29 @@
-import { Project } from "../components/sections/projects"
+import { Project } from "../interfaces/project"
+import axios,{ AxiosResponse, AxiosRequestConfig } from 'axios';
 
 export function getStrapiURL(path: string) {
   return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
     }${path}`
+}
+
+export function fetcher<T>(url: string) { 
+  const defaultOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  } as AxiosRequestConfig;
+  const mergedOptions = {
+    ...defaultOptions,
+  }
+  return axios.get(getStrapiURL(url), mergedOptions)
+    .then(({data}: AxiosResponse<T> ) => {
+      console.log(data,"Data fetcg")
+      return data
+    })
+    .catch((error) => {
+      console.log(error);
+    throw error
+    })
 }
 
 // Helper to make GET requests to Strapi
@@ -68,7 +89,7 @@ export async function getProjectData(slug: string, params = "") {
     return null
   }
 
-  return projects[0]
+  return projects[0] as Project;
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)

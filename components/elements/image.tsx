@@ -1,6 +1,7 @@
 import { getStrapiMedia } from "../../utils/media";
 import PropTypes from "prop-types";
 import { mediaPropTypes } from "../../utils/types";
+// import Image as BaseImage from 'next/image'
 
 const Image = ({ media, className }) => {
   const { url, alternativeText } = media;

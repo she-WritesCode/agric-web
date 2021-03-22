@@ -1,52 +1,72 @@
-import classNames from "classnames";
 import { getProjectData, getProjects } from "../../utils/api";
 import qs from "qs";
 import { useEffect, useState } from "react";
 import ProjectCard from "../projects/project-card";
+import CardSkeleton from "../elements/card-skeleton";
+import { Project } from "../../interfaces/project";
 
-export interface Project {
+export interface ProjectsSection {
+	__component: string;
 	id: number;
-	title: string;
-	slug: string;
-	description: string;
-	location: string;
-	duration: number;
-	roi: number;
-	investmentFee: number;
-	availableSlots: number;
-	slotsCapacity: string;
-	insuredBy: string;
-	shortDescription: string;
-	published_at: Date;
-	created_at: Date;
-	updated_at: Date;
-	project_categories: any[];
-	order_products: any[];
+	title: null;
+	limit: number;
+	paginate: boolean;
+	meta: string;
 }
 
-const Projects = ({ data }) => {
+interface Props {
+	data: ProjectsSection;
+}
+
+const Projects = ({ data }: Props) => {
+	// console.log(JSON.stringify(data));
 	const [projects, setProjects] = useState<Project[]>([]);
+	const [error, setError] = useState<string>("");
+	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		setError("");
+		setLoading(true);
 		getData(data.limit, Number(data.paginate)).then((proj) => {
-			setProjects(proj);
+			if (proj) {
+				setProjects(proj);
+				setLoading(false);
+				setError("");
+			}
 		});
+		setError("Error getting projects");
 	}, []);
 
 	return (
-		<div className="container py-12">
-			<h3>{data.title || ""}</h3>
-			<div className="grid grid-col-3">
-				{projects.map((project) => (
-					<div key={project.id}>
-						<ProjectCard project={project} />
+		<section className="w-full px-10">
+			<div className="mx-auto max-w-5xl">
+				<div className="container py-24">
+					{data.title && (
+						<div className="text-center mb-12">
+							<div className="text-3xl font-black">{data.title}</div>
+						</div>
+					)}
+					<div className="text-xl font-bold">{error}</div>
+					<div className="grid md:grid-cols-3 gap-12">
+						{loading
+							? [1, 2, 3, 4, 5, 6].map((n) => (
+									<div key={n}>
+										<CardSkeleton />
+									</div>
+							  ))
+							: projects.map((project) => (
+									<div key={project.id}>
+										<ProjectCard project={project} />
+									</div>
+							  ))}
 					</div>
-				))}
+				</div>
 			</div>
-		</div>
+		</section>
 	);
 };
 
+//TODO: Update to swr
 async function getData(_limit: number, _start = 0) {
 	const query = qs.stringify({ _limit, _start });
 	return await getProjects(query);

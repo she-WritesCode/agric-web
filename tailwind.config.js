@@ -1,9 +1,12 @@
-const { colors } = require(`tailwindcss/defaultTheme`);
+const { colors, fontFamily } = require(`tailwindcss/defaultTheme`);
 
 module.exports = {
   purge: ["./components/**/*.tsx", "./pages/**/*.tsx"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Josefin Sans', ...fontFamily.sans],
+      },
       colors: {
         primary: colors.green,
       },
