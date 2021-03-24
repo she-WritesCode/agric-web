@@ -1,12 +1,5 @@
-import { fetcher, getProjectData, getProjects, getStrapiURL } from "../../utils/api";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
 import ProjectList from "../../components/projects/project-list";
 import Seo from "../../components/elements/seo";
-import { Project } from "../../interfaces/project";
-import { useRouter } from "next/router";
-import { Media } from "../../interfaces/elements";
-import useSWR from "swr";
-import { useProjects } from "../../utils/projects";
 
 function generateSeoMetadata() {
 	return {

@@ -7,6 +7,10 @@ html {
 	scroll-behavior: smooth;
 	@apply text-gray-700;
 }
+:root,
+.p-component {
+	--primary-color: #10b981 !important;
+}
 
 @media screen and (min-width: 640px) {
 	html {

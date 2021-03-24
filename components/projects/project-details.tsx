@@ -10,9 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartLine, faMapMarkedAlt, faShieldAlt, faStopwatch, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import { toCurrency } from "../../utils/helpers";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import React from "react";
+import { useRouter } from "next/router";
+import { useCheckout } from "../../utils/projects";
+// import ImageBase from "next/image";
 
 function itemTemplate(media: Media) {
 	if (media) {
@@ -22,31 +23,27 @@ function itemTemplate(media: Media) {
 }
 
 function thumbnailTemplate(media: Media) {
-	return <Image media={media} className="w-48 h-auto" />;
+	return <Image media={media} className="w-24 h-auto" />;
 }
 
-function ProjectDetails({ project }: { project: Project }) {
-	const images: Media[] = [
-		{ url: "https://picsum.photos/300/210", alternativeText: "dummy image", mime: "image", id: 1 },
-		{ url: "https://picsum.photos/300/200", alternativeText: "dummy image", mime: "image", id: 2 },
-		{ url: "https://picsum.photos/300/215", alternativeText: "dummy image", mime: "image", id: 3 },
-		{ url: "https://picsum.photos/300/205", alternativeText: "dummy image", mime: "image", id: 4 },
-	];
+const responsiveOptions = [
+	{
+		breakpoint: "1024px",
+		numVisible: 5,
+	},
+	{
+		breakpoint: "768px",
+		numVisible: 3,
+	},
+	{
+		breakpoint: "560px",
+		numVisible: 1,
+	},
+];
 
-	const responsiveOptions = [
-		{
-			breakpoint: "1024px",
-			numVisible: 5,
-		},
-		{
-			breakpoint: "768px",
-			numVisible: 3,
-		},
-		{
-			breakpoint: "560px",
-			numVisible: 1,
-		},
-	];
+function ProjectDetails({ project }: { project: Project }) {
+	const router = useRouter();
+	const images: Media[] = project.mainImage?.url || project.images.length ? [project.mainImage, ...project.images] : []; //[{ url: "https://picsum.photos/300/210", alternativeText: "dummy image", mime: "image", id: 1 }];
 
 	const [value, setValue] = useState(1);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -70,7 +67,12 @@ function ProjectDetails({ project }: { project: Project }) {
 			profitSimulation.current?.scrollIntoView();
 			return;
 		}
-		console.log("cant find it");
+	}
+
+	function checkout() {
+		const { storeProject } = useCheckout();
+		storeProject(project, value);
+		router.push("/[[slug]]", "/checkout");
 	}
 
 	return (
@@ -79,14 +81,18 @@ function ProjectDetails({ project }: { project: Project }) {
 				<div className="container py-20">
 					<div className="grid md:grid-cols-2 gap-10">
 						<div className="md:col-span-1">
-							<Galleria
-								value={images}
-								responsiveOptions={responsiveOptions}
-								numVisible={5}
-								style={{ width: "100%" }}
-								item={itemTemplate}
-								thumbnail={thumbnailTemplate}
-							/>
+							{images.length ? (
+								<Galleria
+									value={images}
+									responsiveOptions={responsiveOptions}
+									numVisible={5}
+									style={{ width: "100%" }}
+									item={itemTemplate}
+									thumbnail={thumbnailTemplate}
+								/>
+							) : (
+								<img src="/images/default.png" className="w-full shadow h-auto" alt={project.title} />
+							)}
 						</div>
 						<div className="md:col-span-1">
 							<div className="inline">
@@ -153,7 +159,12 @@ function ProjectDetails({ project }: { project: Project }) {
 									/>
 								</div>
 								<div className="p-field">
-									<Button icon="pi pi-dollar" label="Fund Project" className="rounded-3xl font-semibold" />
+									<Button
+										icon="pi pi-dollar"
+										onClick={checkout}
+										label="Fund Project"
+										className="rounded-3xl font-semibold"
+									/>
 								</div>
 							</div>
 						</div>

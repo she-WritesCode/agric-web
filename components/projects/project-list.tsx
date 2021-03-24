@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 import { useProjectCategories, useProjects } from "../../utils/projects";
 import CardSkeleton from "../elements/card-skeleton";
 import qs from "qs";
-import { id } from "date-fns/locale";
-
-function getQueryString(arr: string[]) {
-	return arr.join("&");
-}
+import { getQueryString } from "../../utils/helpers";
 
 function ProjectList() {
 	const sortOptions = [

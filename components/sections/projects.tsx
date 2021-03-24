@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import ProjectCard from "../projects/project-card";
 import CardSkeleton from "../elements/card-skeleton";
 import { Project } from "../../interfaces/project";
+import { getQueryString } from "../../utils/helpers";
+import { useProjects } from "../../utils/projects";
 
 export interface ProjectsSection {
 	__component: string;
@@ -19,23 +21,13 @@ interface Props {
 }
 
 const Projects = ({ data }: Props) => {
-	// console.log(JSON.stringify(data));
-	const [projects, setProjects] = useState<Project[]>([]);
-	const [error, setError] = useState<string>("");
-	const [loading, setLoading] = useState<boolean>(false);
+	const query = qs.stringify({
+		_limit: data.limit,
+		_start: Number(data.paginate),
+		_sort: { created_at: "DESC" },
+	});
 
-	useEffect(() => {
-		setError("");
-		setLoading(true);
-		getData(data.limit, Number(data.paginate)).then((proj) => {
-			if (proj) {
-				setProjects(proj);
-				setLoading(false);
-				setError("");
-			}
-		});
-		setError("Error getting projects");
-	}, []);
+	const { projects, isLoading, isError } = useProjects(getQueryString([query]));
 
 	return (
 		<section className="w-full px-10">
@@ -46,9 +38,9 @@ const Projects = ({ data }: Props) => {
 							<div className="text-3xl font-black">{data.title}</div>
 						</div>
 					)}
-					<div className="text-xl font-bold">{error}</div>
+					<div className="text-xl font-bold">{isError && "Error fetching projects"}</div>
 					<div className="grid md:grid-cols-3 gap-12">
-						{loading
+						{isLoading
 							? [1, 2, 3, 4, 5, 6].map((n) => (
 									<div key={n}>
 										<CardSkeleton />
@@ -65,11 +57,5 @@ const Projects = ({ data }: Props) => {
 		</section>
 	);
 };
-
-//TODO: Update to swr
-async function getData(_limit: number, _start = 0) {
-	const query = qs.stringify({ _limit, _start });
-	return await getProjects(query);
-}
 
 export default Projects;
