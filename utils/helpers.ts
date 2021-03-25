@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 export function toCurrency(amount: number) {
     return amount.toLocaleString("en-NG", { currency: "NGN", style: "currency" });
 }
@@ -26,4 +28,21 @@ export function generatePaymentReference(unique: string){
     unique = unique.replace(/\s/g, "").replace("@", "").replace(".", "").trim().toUpperCase()
     const paymentRef =`TAPR-${generateString(unique, 8)}`.replace(/\s/g, "")
     return paymentRef;
+}
+
+export function setToken(jwt: string) {
+	if (typeof window !== 'undefined') {
+		window.localStorage.setItem("token", jwt);
+    }
+}
+
+export function getToken() {
+    if (typeof window !== 'undefined') {
+        const token  = window.localStorage.getItem("token");
+        if (token) {
+            return token;
+        }
+        const router = useRouter()
+        router.push("/[[slug]]", "/auth/login")
+    }
 }

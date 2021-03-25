@@ -1,4 +1,5 @@
 import { Media } from "./elements";
+import { Investment } from "./user";
 
 export interface Project {
 	mainImage: Media;
@@ -19,8 +20,10 @@ export interface Project {
 	created_at: Date;
 	updated_at: Date;
 	project_categories: ProjectCategory[];
-	order_products: any[];
+    investments:        Investment[];
 }
+
+
 
 export interface ProjectCategory {
     id:           number;

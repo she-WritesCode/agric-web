@@ -1,12 +1,24 @@
-import { generatePaymentReference, toCurrency } from "../../utils/helpers";
+import { generatePaymentReference, getToken, toCurrency } from "../../utils/helpers";
 import { useCheckout } from "../../utils/projects";
 import { useState } from "react";
 import { PaystackButton } from "react-paystack";
 import { Service } from "../../utils/service";
-import { User, CreateUserParam, LoginData } from "../../interfaces/user";
+import {
+	User,
+	CreateUserParam,
+	LoginData,
+	PaymentStatus,
+	InvestmentStatus,
+	InvestmentCreateParam,
+	Investment,
+	Payment,
+	PaymentCreateParam,
+} from "../../interfaces/user";
 import { string, object, ref } from "yup";
 import { FormikHelpers } from "formik";
 import TForm, { FormSchema } from "../elements/t-form";
+import { useRouter } from "next/router";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const CreateAccountSchema = object().shape({
 	email: string().email().required(),
@@ -69,8 +81,9 @@ const formSchema: FormSchema = {
 };
 
 function Checkout() {
-	const { retriveProject } = useCheckout();
+	const { retriveProject, removeProject } = useCheckout();
 	const { project, quantity } = retriveProject();
+	const router = useRouter();
 	const publicKey = "pk_test_3ad1a83f414de81ebbbf41872ac3860784e45f28";
 
 	if (!project) return <div>No project selected</div>;
@@ -85,12 +98,16 @@ function Checkout() {
 		quantity: quantity,
 	});
 
+	const [loading, setLoading] = useState(false);
 	const [isRegistered, setIsRegistered] = useState(false);
+	const [user, setUser] = useState<Partial<User>>({});
+	const [paymentCreated, setPaymentCreated] = useState(false);
+	const [investmentCreated, setInvestmentCreated] = useState(false);
 
 	const amount = project.investmentFee * state.quantity;
 	let reference = "";
 
-	function createAccount(
+	async function createAccount(
 		values: Partial<CreateUserParam & { confirm_password: string }>,
 		{
 			setSubmitting,
@@ -102,25 +119,42 @@ function Checkout() {
 	) {
 		reference = generatePaymentReference(`${state.email}${Date.now()}`);
 		setLoading(true);
-		new Service<LoginData, Partial<CreateUserParam>>("/auth/local/register")
-			.create({
+		if (getToken()) {
+			setUser(await new Service<User>("/users", true).getOne("me"));
+			setIsRegistered(true);
+		} else {
+			const loginData = await new Service<LoginData, Partial<CreateUserParam>>("/auth/local/register").create({
 				firstname: values.firstname,
 				lastname: values.lastname,
 				email: values.email,
 				username: values.email,
 				phone: values.phone,
 				password: values.password,
-			})
-			.then((data) => {
-				if (typeof window !== "undefined") {
-					window.localStorage.setItem("token", data.jwt);
-				}
-				setIsRegistered(true);
-			})
-			.finally(() => {
-				setLoading(false);
-				setSubmitting(false);
 			});
+			if (typeof window !== "undefined") {
+				window.localStorage.setItem("token", loginData.jwt);
+			}
+			setIsRegistered(true);
+			setUser(loginData.user);
+			setSubmitting(false);
+		}
+		setLoading(false);
+		const payment = await new Service<Payment, Partial<PaymentCreateParam>>("/payments", true).create({
+			status: PaymentStatus.pending,
+			reference: reference,
+			amountPaid: amount,
+		});
+		setPaymentCreated(true);
+		const investment = await new Service<Investment, Partial<InvestmentCreateParam>>("/investments", true).create({
+			payment: payment,
+			user: user,
+			project: { id: project?.id },
+			quantity: state.quantity,
+			status: InvestmentStatus.awaiting_confirmation,
+			amountPerSlot: project?.investmentFee,
+		});
+		setInvestmentCreated(true);
+		removeProject();
 	}
 
 	const componentProps = {
@@ -131,12 +165,13 @@ function Checkout() {
 		reference,
 		publicKey,
 		text: "Pay Now",
-		onSuccess: () => {
-			alert("Thanks for doing business with us! Come back soon!!");
+		onSuccess: async () => {
+			// await new Service<Payment, Partial<PaymentCreateParam>>("/payments", true).update(reference, {
+			// 	status: PaymentStatus.awaitingConfirmation,
+			// });
+			router.push("/dashboard");
 		},
 	};
-
-	const [loading, setLoading] = useState(false);
 
 	return (
 		<section className="w-full px-10">
@@ -213,14 +248,25 @@ function Checkout() {
 									/>
 								) : (
 									<>
-										<div className="flex items-center justify-center">
+										<div className="flex flex-col items-center py-8 justify-center">
 											<div className="text-2xl">Awesome!! Your account has been created</div>
-										</div>
-										<div className="p-field">
-											<PaystackButton
-												className="p-component p-button rounded-3xl flex justify-center items-center"
-												{...componentProps}
-											/>
+											{!paymentCreated || !investmentCreated ? (
+												<div className="text-base">
+													<ProgressSpinner />
+													{!investmentCreated || <p>Please wait... we are creating your investment</p>}
+													{!paymentCreated || <p>Please wait... while we finish up some paper work</p>}
+												</div>
+											) : (
+												<>
+													<div className="text-base">Your investment has been created. Proceed to pay</div>
+													<div className="p-field">
+														<PaystackButton
+															className="p-component p-button rounded-3xl flex justify-center items-center"
+															{...componentProps}
+														/>
+													</div>
+												</>
+											)}
 										</div>
 									</>
 								)}

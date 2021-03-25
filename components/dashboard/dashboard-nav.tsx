@@ -14,7 +14,7 @@ function DashboardNav() {
 						Dashboard
 					</a>
 				</Link>
-				<Link href={`/dashboard`}>
+				<Link href={`/projects`}>
 					<a className="px-3 md:px-6 py-3 my-1 hover:text-primary-500 hover:bg-green-50">
 						<span className="mr-2">
 							<FontAwesomeIcon icon={faSearchDollar} />
