@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "../elements/image";
 import CustomLink from "../elements/custom-link";
 
-const TestimonialsGroup = ({ data }) => {
+const TestimonialsGroup = ({ data }: any) => {
 	// Only show one testimonial at a time
 	const [selectedTestimonialIndex, setSelectedTestimonialIndex] = useState(0);
 	const selectedTestimonial = data.testimonials[selectedTestimonialIndex];
@@ -35,7 +35,7 @@ const TestimonialsGroup = ({ data }) => {
 			{/* Change selected testimonial (only if there is more than one) */}
 			{data.testimonials.length > 1 && (
 				<div className="flex flex-row gap-4 mt-10 justify-center">
-					{data.testimonials.map((testimonial, index) => (
+					{data.testimonials.map((testimonial: any, index: number) => (
 						<button
 							onClick={() => setSelectedTestimonialIndex(index)}
 							className={classNames(
@@ -53,7 +53,7 @@ const TestimonialsGroup = ({ data }) => {
 			)}
 			{/* Logos list */}
 			<div className="flex flex-row flex-wrap items-center gap-6 sm:gap-20 justify-center mt-10 px-6 sm:px-0">
-				{data.logos.map((logo) => (
+				{data.logos.map((logo: any) => (
 					<Image media={logo.logo} className="h-8 max-w-xs w-auto object-contain" key={logo.id} />
 				))}
 			</div>

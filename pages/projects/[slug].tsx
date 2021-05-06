@@ -3,14 +3,14 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import ProjectDetails from "../../components/projects/project-details";
 import Seo from "../../components/elements/seo";
 import { Project } from "../../interfaces/project";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 function generateSeoMetadata(project: Project) {
 	return { metaTitle: project.title, metaDescription: project.shortDescription, shareImage: project.mainImage };
 }
 
 function SingleProject({ project }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter()
+	const router = useRouter();
 	if (router.isFallback) {
 		return <div>Loading...</div>;
 	}
@@ -27,6 +27,9 @@ export async function getStaticPaths() {
 	// Get all projects from Strapi
 	const projects = await getProjects();
 	const paths = projects?.map((project) => {
+		console.log("TESTING", {
+			params: { slug: project.slug },
+		});
 		return {
 			params: { slug: project.slug },
 		};

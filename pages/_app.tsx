@@ -23,7 +23,8 @@ export interface PageProps {
 	path: string;
 }
 
-const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }) => {
+// @ts-ignore
+const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }: any) => {
 	// Prevent Next bug when it tries to render the [[...slug]] route
 	PrimeReact.ripple = true;
 
@@ -51,7 +52,7 @@ const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }) => {
 				title={"Page"}
 				description={metadata.metaDescription}
 				openGraph={{
-					images: Object.values(metadata.shareImage.formats).map((image: Record<string, any>) => {
+					images: Object.values(metadata.shareImage.formats).map((image: any) => {
 						return {
 							url: getStrapiMedia(image.url),
 							width: image.width,
@@ -82,7 +83,8 @@ const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }) => {
 // have getStaticProps. So [[...slug]] pages still get SSG.
 // Hopefully we can replace this with getStaticProps once this issue is fixed:
 // https://github.com/vercel/next.js/discussions/10949
-MyApp.getInitialProps = async (ctx) => {
+// @ts-ignore
+MyApp.getInitialProps = async (ctx: any) => {
 	// Calls page's `getInitialProps` and fills `appProps.pageProps`
 	const appProps = await App.getInitialProps(ctx);
 	// Fetch global site settings from Strapi

@@ -4,7 +4,7 @@ import { fetchAPI } from "../../utils/api";
 import * as yup from "yup";
 import { Formik, Form, Field, FormikErrors } from "formik";
 
-const LeadForm = ({ data }) => {
+const LeadForm = ({ data }: any) => {
 	const [loading, setLoading] = useState(false);
 
 	const LeadSchema = yup.object().shape({

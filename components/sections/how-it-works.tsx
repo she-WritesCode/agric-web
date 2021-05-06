@@ -4,7 +4,7 @@ import Markdown from "react-markdown";
 function HowItWorks({ data }: any) {
 	return (
 		<>
-			<div class="w-full relative -mt-16 py-8 bg-primary-500 text-white rounded-t-full"></div>
+			<div className="w-full relative -mt-16 py-8 bg-primary-500 text-white rounded-t-full"></div>
 			<section className="w-full px-10 bg-primary-500 text-white relative">
 				<div className="mx-auto max-w-5xl">
 					<div className="container pt-4 pb-20">

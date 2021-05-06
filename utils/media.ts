@@ -1,4 +1,4 @@
-export function getStrapiMedia(url) {
+export function getStrapiMedia(url: any) {
   if (url == null) {
     return null;
   }

@@ -3,10 +3,10 @@ import Image from "../elements/image";
 import Video from "../elements/video";
 import CustomLink from "../elements/custom-link";
 
-const FeatureRowsGroup = ({ data }) => {
+const FeatureRowsGroup = ({ data }: any) => {
 	return (
 		<>
-			{data.features.map((feature, index) => (
+			{data.features.map((feature: any, index: number) => (
 				<section className="w-full px-10">
 					<div className="mx-auto max-w-5xl">
 						<div className="container flex flex-col gap-12 py-24">

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Markdown from "react-markdown";
 
-const RichText = ({ data }) => {
+const RichText = ({ data }: any) => {
 	return (
 		<div className="prose prose-lg container text-current py-12">
 			<Markdown source={data.content} />

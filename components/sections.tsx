@@ -12,7 +12,7 @@ import Projects from "./sections/projects";
 import HowItWorks from "./sections/how-it-works";
 
 // Map Strapi sections to section components
-const sectionComponents = {
+const sectionComponents: Record<string, any> = {
 	"sections.hero": Hero,
 	"sections.large-video": LargeVideo,
 	"sections.feature-columns-group": FeatureColumnsGroup,
@@ -27,7 +27,7 @@ const sectionComponents = {
 };
 
 // Display a section individually
-const Section = ({ sectionData }) => {
+const Section = ({ sectionData }: Record<string, any>) => {
 	// Prepare the component
 	const SectionComponent = sectionComponents[sectionData.__component];
 
@@ -56,13 +56,13 @@ const PreviewModeBanner = () => {
 };
 
 // Display the list of sections
-const Sections = ({ sections, preview }) => {
+const Sections = ({ sections, preview }: any) => {
 	return (
 		<div className="flex flex-col">
 			{/* Show a banner if preview mode is on */}
 			{preview && <PreviewModeBanner />}
 			{/* Show the actual sections */}
-			{sections.map((section) => (
+			{sections.map((section: any) => (
 				<Section sectionData={section} key={`${section.__component}${section.id}`} />
 			))}
 		</div>
