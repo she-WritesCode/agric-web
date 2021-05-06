@@ -2,7 +2,7 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import { linkPropTypes } from "../../utils/types";
 
-const CustomLink = ({ link, children }) => {
+const CustomLink = ({ link, children }: any) => {
   const isInternalLink = link.url.startsWith('/')
 
   // For internal links, use the Next.js Link component
