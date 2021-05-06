@@ -89,18 +89,18 @@ function Checkout() {
 	if (!project) return <div>No project selected</div>;
 
 	const [state, setState] = useState({
-		firstname: "Busola",
-		lastname: "Okeowo",
-		email: "busolaokemoney@gmail.com",
-		phone: "08026910113",
-		password: "password",
-		confirm_password: "password",
+		firstname: "",
+		lastname: "",
+		email: "",
+		phone: "",
+		password: "",
+		confirm_password: "",
 		quantity: quantity,
 	});
 
 	const [loading, setLoading] = useState(false);
-	const [isRegistered, setIsRegistered] = useState(false);
 	const [user, setUser] = useState<Partial<User>>({});
+	const [isRegistered, setIsRegistered] = useState(!!user);
 	const [paymentCreated, setPaymentCreated] = useState(false);
 	const [investmentCreated, setInvestmentCreated] = useState(false);
 
@@ -246,7 +246,7 @@ function Checkout() {
 										initialValues={{ ...state }}
 										className="grid-cols-2 gap-x-4"
 									/>
-								) : (
+								) : !user ? (
 									<>
 										<div className="flex flex-col items-center py-8 justify-center">
 											<div className="text-2xl">Awesome!! Your account has been created</div>
@@ -267,6 +267,16 @@ function Checkout() {
 													</div>
 												</>
 											)}
+										</div>
+									</>
+								) : (
+									<>
+										<div className="text-base">Hi {user.firstname}!</div>
+										<div className="p-field">
+											<PaystackButton
+												className="p-component p-button rounded-3xl flex justify-center items-center"
+												{...componentProps}
+											/>
 										</div>
 									</>
 								)}

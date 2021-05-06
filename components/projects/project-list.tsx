@@ -18,7 +18,7 @@ function ProjectList() {
 	const [filterValue, setFilterValue] = useState("");
 	const [filterRawValue, setFilterRawValue] = useState<number[]>([]);
 	const { projects, isLoading, isError } = useProjects(getQueryString([sortValue, filterValue]));
-	const { categories, isLoading: categoriesIsLoading, isError: categoriesIsError } = useProjectCategories();
+	// const { categories, isLoading: categoriesIsLoading, isError: categoriesIsError } = useProjectCategories();
 
 	if (isError) return <div>an error occured</div>;
 
@@ -36,8 +36,8 @@ function ProjectList() {
 			<section className="w-full px-10">
 				<div className="mx-auto max-w-5xl">
 					<div className="container py-24">
-						<div className="flex flex-col lg:flex-row gap-10">
-							<div className="w-full lg:w-3/12">
+						<div className="flex flex-col gap-5">
+							<div className="w-full">
 								<div className="flex lg:flex-col gap-6">
 									<div className="p-field">
 										<label className="text-lg font-semibold mr-2" htmlFor="sort">
@@ -53,7 +53,7 @@ function ProjectList() {
 											options={sortOptions}
 										/>
 									</div>
-									<div className="hidden">
+									{/* <div className="hidden">
 										<div className="text-lg font-semibold">Filter by Category</div>
 										<div className="flex lg:flex-col">
 											<ListBox
@@ -68,25 +68,27 @@ function ProjectList() {
 												listStyle={{ maxHeight: "100%" }}
 											/>
 										</div>
-									</div>
+									</div> */}
 								</div>
 							</div>
 							<div className="w-full">
 								<div className="grid md:grid-cols-3 gap-12">
 									{isLoading ? (
-										<div className="grid md:grid-cols-3 gap-12">
-											{[1, 2, 3, 4, 5, 6].map((n) => (
+										<>
+											{new Array(6).map((n) => (
 												<div key={n}>
 													<CardSkeleton />
 												</div>
 											))}
-										</div>
+										</>
 									) : (
 										projects.map((project) => {
 											return (
-												<div key={project.id}>
-													<ProjectCard project={project} />
-												</div>
+												<>
+													<div key={project.id}>
+														<ProjectCard project={project} />
+													</div>
+												</>
 											);
 										})
 									)}

@@ -4,14 +4,11 @@ import Link from "next/link";
 import { toCurrency } from "../../utils/helpers";
 
 function ProjectCard({ project }: { project: Project }) {
+	const imageUrl = project.mainImage ? project.mainImage.url : "/images/default.png";
 	return (
 		<div className="shadow-xl bg-white rounded-2xl hover:shadow-2xl">
 			<div className="h-32 bg-primary-300 rounded-t-2xl relative">
-				<img
-					className="object-cover w-full h-full rounded-t-2xl object-center"
-					src="https://picsum.photos/700/500"
-					alt=""
-				/>
+				<img className="object-cover w-full h-full rounded-t-2xl object-center" src={imageUrl} alt={project.title} />
 				<div className="absolute mb-2 bg-primary-500 text-white text-sm p-1 bottom-0 right-0 rounded-l">
 					{project.availableSlots} slots left
 				</div>
@@ -34,15 +31,10 @@ function ProjectCard({ project }: { project: Project }) {
 						<div className="font-semibold">{project.duration} months</div>
 					</div>
 				</div>
-				<div className="mt-2 mb-4 flex flex-wrap gap-3 text-center">
-					<Link href="/projects/[slug]" as={"/projects/" + project.slug}>
-						<a className="bg-transparent border-2 border-primary-500 px-3 py-2 rounded-full text-sm text-green-500 font-bold shadow hover:shadow-lg hover:border-primary-600 hover:bg-primary-600 hover:text-white">
-							View
-						</a>
-					</Link>
+				<div className="mt-2 flex flex-wrap gap-3 justify-center text-center">
 					<Link href="/projects/[slug]" as={"/projects/" + project.slug}>
 						<a className="bg-primary-500 border-2 border-primary-500 px-3 py-2 rounded-full text-sm text-white font-bold shadow hover:shadow-lg hover:border-primary-600 hover:bg-primary-600">
-							Fund Project
+							View Project
 						</a>
 					</Link>
 				</div>

@@ -1,4 +1,7 @@
 import { Skeleton } from "primereact/skeleton";
+import qs from "qs";
+import { useInvestments } from "../../utils/projectsFunded";
+import { useCurrentUser } from "../../utils/user";
 function SkeletonProject() {
 	return (
 		<>
@@ -27,35 +30,53 @@ function SkeletonProject() {
 }
 
 function DashboardProjectFunded() {
-	const items: any[] = [];
+	const { user } = useCurrentUser();
+
+	const { investments, isLoading, isError } = useInvestments(
+		qs.stringify({
+			_where: { "user.id": user.id },
+			_limit: 3,
+			_sort: "created_at:DESC",
+		}),
+	);
+
 	return (
 		<>
-			{items.length
-				? items.map(() => {
+			{isError ? (
+				<div className="">Error fetching your investments</div>
+			) : !isLoading ? (
+				<div className="grid grid-flow-row gap-2 ">
+					{investments.map((investment) => {
+						const imageUrl = investment.project.mainImage ? investment.project.mainImage.url : "/images/default.png";
 						return (
-							<div className="grid grid-flow-col items-center my-1">
+							<div className="grid grid-flow-col items-center gap-2 my-1">
 								<div className="flex items-center">
 									<div className="h-10 w-10 rounded-full bg-green-200 mr-2">
 										<img
-											className="w-full h-full object-cover object-center rounded-full"
-											src="https://picsum.photos/300"
-											alt=""
+											className="w-full h-full shadow object-cover object-center rounded-full"
+											src={imageUrl}
+											alt={investment.project.title}
 										/>
 									</div>
 									<div className="mr-2 w-ful">
-										<div className="font-semibold">Catfish hatery at epe</div>
-										<div className="text-sm">January 25 2021</div>
+										<div className="font-semibold">
+											{investment.project.title} ({investment.quantity})
+										</div>
+										<div className="text-sm">{new Date(investment.created_at).toDateString()}</div>
 									</div>
 								</div>
 								<div className="justify-self-end">
-									<div className="font-semibold text-primary-500">₦ 50,000.00</div>
+									<div className="font-semibold text-primary-500">{investment.amountPerSlot * investment.quantity}</div>
 								</div>
 							</div>
 						);
-				  })
-				: [1, 2, 3].map(() => {
-						return <SkeletonProject />;
-				  })}
+					})}
+				</div>
+			) : (
+				new Array(3).map(() => {
+					return <SkeletonProject />;
+				})
+			)}
 		</>
 	);
 }

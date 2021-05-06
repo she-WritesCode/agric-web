@@ -11,6 +11,7 @@ export function useProjects(queryString = "_sort=created_at:DESC") {
 		isError: error,
 	};
 }
+
 export function useProjectCategories(queryString = "_sort=created_at:DESC") {
 	const { data, error } = useSWR<ProjectCategory[]>(`/project-categories/?${queryString}`, fetcher);
 
@@ -25,21 +26,22 @@ export function useCheckout() {
 
 	const storeProject = (project: Project, quantity: number) => {
 		if (typeof window !== 'undefined') {
-		window.localStorage.setItem("project", JSON.stringify({project, quantity}));
+			window.localStorage.setItem("project", JSON.stringify({project, quantity}));
 		}
 	}
 	const removeProject = () => {
 		if (typeof window !== 'undefined') {
-		window.localStorage.removeItem("project");
+			window.localStorage.removeItem("project");
 		}
 	}
 	const retriveProject = () => {
 		if (typeof window !== 'undefined') {
-		const stringValue = window.localStorage.getItem("project")
-		if (stringValue) {
-			return JSON.parse(stringValue) as { project: Project; quantity: number};
+			const stringValue = window.localStorage.getItem("project")
+			if (stringValue) {
+				return JSON.parse(stringValue) as { project: Project; quantity: number};
+			}
 		}
-	}
+
 		return { project: null, quantity:0 }
 	}
 

@@ -23,14 +23,23 @@ export interface Project {
     investments:        Investment[];
 }
 
-
-
 export interface ProjectCategory {
     id:           number;
     title:        string;
-    description:  null;
+    description:  string;
     published_at: Date;
     created_at:   Date;
     updated_at:   Date;
     projects:     Project[];
+}
+
+export interface ProjectUpdate {
+    id:           number;
+    title:        string;
+    content:  string;
+    stage:  string;
+    published_at: Date;
+    created_at:   Date;
+    updated_at:   Date;
+    project:     Project;
 }

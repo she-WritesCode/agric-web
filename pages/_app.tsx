@@ -16,9 +16,10 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import "../styles/index.css";
 import PrimeReact from "primereact/api";
+import DashboardLayout from "../components/dashboard-layout";
 
 export interface PageProps {
-	global: any;
+	global: Record<string, any>;
 	path: string;
 }
 
@@ -65,7 +66,13 @@ const MyApp: NextPage<AppProps<PageProps>> = ({ Component, pageProps }) => {
 			/>
 			{/* Display the content */}
 			<Layout global={global}>
-				<Component {...pageProps} />
+				{router.pathname.startsWith("/dashboard") ? (
+					<DashboardLayout>
+						<Component {...pageProps}></Component>
+					</DashboardLayout>
+				) : (
+					<Component {...pageProps} />
+				)}
 			</Layout>
 		</>
 	);

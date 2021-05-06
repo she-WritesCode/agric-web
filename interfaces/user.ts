@@ -8,8 +8,6 @@ export interface CreateUserParam {
     email:              string;
     provider:           string;
     password:           string;
-    resetPasswordToken: string;
-    confirmationToken:  string;
     confirmed:          boolean;
     blocked:            boolean;
     role:               Role;
@@ -34,12 +32,16 @@ export interface User {
     blocked:            boolean;
     role:               Role;
     investments:        Investment[];
-    created_by:         Date;
-    updated_by:         Date;
+    created_by:         string;
+    updated_by:         string;
+    created_at:         Date;
+    updated_at:         Date;
 }
 
 
 export interface Investment {
+    created_at:         Date;
+    updated_at:         Date;
     id:            string;
     project:       Project;
     user:          User;

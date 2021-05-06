@@ -1,10 +1,10 @@
 import DashboardHome from "../../components/dashboard/home";
-function Dashboard() {
+function Profile() {
 	return (
 		<>
-			<DashboardHome />
+			<h1>Profile</h1>
 		</>
 	);
 }
 
-export default Dashboard;
+export default Profile;

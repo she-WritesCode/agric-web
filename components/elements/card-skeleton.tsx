@@ -1,7 +1,7 @@
 import { Skeleton } from "primereact/skeleton";
 function CardSkeleton() {
 	return (
-		<div className="custom-skeleton shadow-xl rounded-2xl">
+		<div className="custom-skeleton shadow-xl rounded-2xl w-full">
 			<Skeleton className="rounded-t-2xl" width="100%" height="8rem"></Skeleton>
 			<div className="p-mb-3 px-4 py-6">
 				<Skeleton width="85%" className="p-mb-2"></Skeleton>
